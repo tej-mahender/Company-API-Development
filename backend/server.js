@@ -17,7 +17,7 @@ mongoose.connect(MONGODB_URI)
   .catch(err => console.error('DB connection error:', err));
 
 // Routes
-app.use('/api/company', companyRoutes);
+app.use('/api/companies', companyRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
