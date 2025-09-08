@@ -4,6 +4,28 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Page Heading */
+.companies-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e3a8a; /* Dark blue */
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+/* Optional underline decoration */
+.companies-heading::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #10b981; /* Green accent */
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
 .companies-page {
   max-width: 1200px;
   margin: 2rem auto;

@@ -23,7 +23,7 @@ const Companies = () => {
 
   return (
     <div className="companies-page">
-      <h1>Companies</h1>
+      <h1 className='companies-heading'>Companies</h1>
       <Filters onFilterChange={loadCompanies} />
       {loading ? <p>Loading...</p> :
         view === 'card' ?
