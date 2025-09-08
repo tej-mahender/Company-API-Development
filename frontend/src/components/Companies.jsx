@@ -6,7 +6,7 @@ import { fetchCompanies } from '../services/api';
 const Companies = () => {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState('card'); // 'card' or 'table'
+  const [view, setView] = useState('card');
 
   const loadCompanies = async (filters = {}) => {
     setLoading(true);
@@ -25,9 +25,6 @@ const Companies = () => {
     <div className="companies-page">
       <h1>Companies</h1>
       <Filters onFilterChange={loadCompanies} />
-      <button onClick={() => setView(view === 'card' ? 'table' : 'card')}>
-        Switch to {view === 'card' ? 'Table' : 'Card'} View
-      </button>
       {loading ? <p>Loading...</p> :
         view === 'card' ?
           <div className="company-list">
