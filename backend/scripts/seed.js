@@ -1,79 +1,45 @@
-const mongoose = require('mongoose');
 require('dotenv').config();
-
+const mongoose = require('mongoose');
 const Company = require('../src/models/Company');
-const Department = require('../src/models/Department');
-const Role = require('../src/models/Role');
-const Employee = require('../src/models/Employee');
 
-const connectDB = async () => {
+const MONGODB_URI = process.env.MONGODB_URI;
+
+async function seed() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(MONGODB_URI);
     console.log('MongoDB connected for seeding...');
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
-  }
-};
-
-const seedDB = async () => {
-  await connectDB();
-  try {
-    console.log('Seeding database...');
 
     // Clear existing data
-    await Promise.all([
-      Company.deleteMany(),
-      Department.deleteMany(),
-      Role.deleteMany(),
-      Employee.deleteMany(),
-    ]);
+    await Company.deleteMany({});
+    console.log('Existing companies cleared.');
 
-    // Create a default company
-    const company = await Company.create({
-      name: 'Software Company',
-      description: 'A leading technology company.',
-      address: '123 Tech Park, Hyderabad, India'
-    });
-    console.log('Company created.');
+    // Sample companies
+    const companies = [
+      { name: 'TechCorp', industry: 'Software', location: 'New York', founded: 2010, employeeCount: 500, revenue: 5000000, type: 'Private' },
+      { name: 'HealthPlus', industry: 'Healthcare', location: 'Boston', founded: 2005, employeeCount: 300, revenue: 2000000, type: 'Public' },
+      { name: 'EcoGoods', industry: 'Retail', location: 'San Francisco', founded: 2015, employeeCount: 120, revenue: 800000, type: 'Private' },
+      { name: 'FinServe', industry: 'Finance', location: 'Chicago', founded: 2000, employeeCount: 800, revenue: 10000000, type: 'Public' },
+      { name: 'GreenEnergy', industry: 'Energy', location: 'Austin', founded: 2012, employeeCount: 250, revenue: 1500000, type: 'Private' },
+      { name: 'EduSmart', industry: 'Education', location: 'Seattle', founded: 2018, employeeCount: 50, revenue: 500000, type: 'Non-profit' },
+      { name: 'Foodies', industry: 'Food & Beverage', location: 'Los Angeles', founded: 2011, employeeCount: 100, revenue: 750000, type: 'Private' },
+      { name: 'AutoDrive', industry: 'Automobile', location: 'Detroit', founded: 1995, employeeCount: 1200, revenue: 20000000, type: 'Public' },
+      { name: 'MediLife', industry: 'Healthcare', location: 'Miami', founded: 2008, employeeCount: 400, revenue: 3000000, type: 'Private' },
+      { name: 'BuildIt', industry: 'Construction', location: 'Dallas', founded: 2003, employeeCount: 600, revenue: 12000000, type: 'Public' },
+      { name: 'CloudNet', industry: 'Software', location: 'San Jose', founded: 2016, employeeCount: 220, revenue: 1800000, type: 'Private' },
+      { name: 'FinTechX', industry: 'Finance', location: 'New York', founded: 2014, employeeCount: 350, revenue: 4000000, type: 'Private' },
+      { name: 'AgriGrow', industry: 'Agriculture', location: 'Kansas City', founded: 2009, employeeCount: 180, revenue: 900000, type: 'Private' },
+      { name: 'SafeHome', industry: 'Security', location: 'Denver', founded: 2013, employeeCount: 90, revenue: 600000, type: 'Private' },
+      { name: 'TourPlus', industry: 'Travel', location: 'Orlando', founded: 2017, employeeCount: 60, revenue: 400000, type: 'Private' }
+    ];
 
-    // Create departments
-    const departments = await Department.insertMany([
-      { name: 'Engineering', company: company._id },
-      { name: 'Sales', company: company._id },
-      { name: 'Human Resources', company: company._id }
-    ]);
-    const [engineering, sales, hr] = departments;
-    console.log('Departments created.');
+    await Company.insertMany(companies);
+    console.log('Companies seeded successfully');
 
-    // Create roles
-    const roles = await Role.insertMany([
-      { title: 'Software Engineer', department: engineering._id },
-      { title: 'Engineering Manager', department: engineering._id },
-      { title: 'Sales Manager', department: sales._id },
-      { title: 'Sales Associate', department: sales._id },
-      { title: 'HR Manager', department: hr._id },
-      { title: 'HR Coordinator', department: hr._id }
-    ]);
-    const [seRole, emRole, smRole, saRole, hrmRole, hrcRole] = roles;
-    console.log('Roles created.');
-
-    // Create employees
-    await Employee.insertMany([
-      { name: 'Jane Doe', email: 'jane@techinnovators.com', phone: '123-456-7890', joiningDate: new Date('2015-05-20'), salary: 120000, status: 'Active', department: engineering._id, role: seRole._id },
-      { name: 'John Smith', email: 'john@techinnovators.com', phone: '123-456-7891', joiningDate: new Date('2018-02-10'), salary: 150000, status: 'Active', department: engineering._id, role: emRole._id },
-      { name: 'Alice Johnson', email: 'alice@techinnovators.com', phone: '123-456-7892', joiningDate: new Date('2020-10-01'), salary: 90000, status: 'Active', department: sales._id, role: smRole._id },
-      { name: 'Bob Williams', email: 'bob@techinnovators.com', phone: '123-456-7893', joiningDate: new Date('2021-03-15'), salary: 75000, status: 'On Leave', department: sales._id, role: saRole._id },
-      { name: 'Chris Evans', email: 'chris@techinnovators.com', phone: '123-456-7894', joiningDate: new Date('2019-07-22'), salary: 110000, status: 'Active', department: hr._id, role: hrmRole._id }
-    ]);
-    console.log('Employees created.');
-
-    console.log('Database seeded successfully!');
-  } catch (error) {
-    console.error('Database seeding failed:', error);
-  } finally {
-    mongoose.connection.close();
+    mongoose.disconnect();
+  } catch (err) {
+    console.error('Database seeding failed:', err);
+    mongoose.disconnect();
   }
-};
+}
 
-seedDB();
+seed();

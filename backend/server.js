@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const companyRoutes = require('./src/routes/companyRoutes');
-const departmentRoutes = require('./src/routes/departmentRoutes');
-const roleRoutes = require('./src/routes/roleRoutes');
-const employeeRoutes = require('./src/routes/employeeRoutes');
 
 const app = express();
 app.use(cors());
@@ -21,9 +18,6 @@ mongoose.connect(MONGODB_URI)
 
 // Routes
 app.use('/api/company', companyRoutes);
-app.use('/api/departments', departmentRoutes);
-app.use('/api/roles', roleRoutes);
-app.use('/api/employees', employeeRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
